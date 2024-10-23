@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {marked} from 'marked';
+import {onMounted, ref, watch} from 'vue';
+import marked from './components/markdown.ts';
 
-const inputVal = ref('hello my awesome world!');
+const inputVal = ref('{% cut Bear {%badge-green cool badge%} %}\n' +
+    'body\n' +
+    '{% endcut %}\n' +
+    '\n' +
+    '{%badge-green green badge%}\n' +
+    '\n' +
+    '{%badge-red I\'m red badge%}\n' +
+    '\n' +
+    '{%badge-orange Orange badge%}\n' +
+    '\n' +
+    '{% cut Vodka {%badge-red bad badge%} %}\n' +
+    'body\n' +
+    '{% endcut %}');
 
 
 onMounted(() => {
@@ -51,7 +63,34 @@ onMounted(() => {
       }
     }
   });
+
+  initToggleListeners();
 })
+
+watch(
+() => inputVal.value,
+    () => setTimeout(() => initToggleListeners())
+)
+
+function initToggleListeners() {
+  const accordionList = document.getElementsByClassName('accordion-head');
+
+  for (let accordion of accordionList) {
+    const content = accordion.nextElementSibling;
+    content.style.display = 'none';
+
+
+    accordion.addEventListener('click', () => {
+      accordion.classList.toggle('active');
+
+      if (!accordion.classList.contains('active')) {
+        collapseChildAccordions(content);
+      }
+
+      content.style.display === 'block' ? content.style.display = 'none' : content.style.display = 'block';
+    });
+  }
+}
 
 
 const addList = (type: 'numeric' | 'doted') => {
@@ -92,6 +131,16 @@ const onClick = (leftSymbol: string, rightSymbol?: string) => {
   }
 }
 
+function addElement(type: 'badge' | 'accordion') {
+  if (type === 'badge') {
+    inputVal.value = inputVal.value + ' \n\n{%badge state badge%}'
+  }
+
+  if (type === 'accordion') {
+    inputVal.value = inputVal.value + ' \n\n{% cut head%}\ncontent here\n{% endcut %}'
+  }
+}
+
 </script>
 
 <template>
@@ -104,6 +153,8 @@ const onClick = (leftSymbol: string, rightSymbol?: string) => {
       <button @click="onClick('~')">strike</button>
       <button @click="addList('numeric')">list 1</button>
       <button @click="addList('doted')">list .</button>
+      <button @click="addElement('badge')">Badge</button>
+      <button @click="addElement('accordion')">Accordion</button>
     </div>
 
     <textarea v-model="inputVal" id="textarea" />
@@ -140,5 +191,39 @@ const onClick = (leftSymbol: string, rightSymbol?: string) => {
   background: #787878;
   border: 1px solid #454545;
   border-radius: 10px;
+}
+
+textarea {
+  min-height: 300px;
+}
+
+.badge {
+  background: #000000;
+  border-radius: 10px;
+  color: white;
+  padding: 6px 20px;
+}
+
+.badge.red {
+  background: red;
+}
+
+.badge.green {
+  background: green;
+}
+
+.badge.orange {
+  background: orange;
+}
+
+.accordion-head {
+  background: #1a1a1a;
+  border: 1px solid #2937e6;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.accordion-body {
+  background: #2b2b2b;
 }
 </style>
