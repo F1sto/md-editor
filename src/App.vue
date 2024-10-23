@@ -131,13 +131,24 @@ const onClick = (leftSymbol: string, rightSymbol?: string) => {
   }
 }
 
-function addElement(type: 'badge' | 'accordion') {
+function addElement(type: 'badge' | 'accordion | table') {
   if (type === 'badge') {
     inputVal.value = inputVal.value + ' \n\n{%badge state badge%}'
   }
 
   if (type === 'accordion') {
     inputVal.value = inputVal.value + ' \n\n{% cut head%}\ncontent here\n{% endcut %}'
+  }
+
+  if (type === 'table') {
+    inputVal.value = inputVal.value + ' \n\n| Head | of table |\n' +
+        '| ------ | ------ |\n' +
+        '| Dropbox | [plugins/dropbox/README.md][PlDb] |\n' +
+        '| GitHub | [plugins/github/README.md][PlGh] |\n' +
+        '| Google Drive | [plugins/googledrive/README.md][PlGd] |\n' +
+        '| OneDrive | [plugins/onedrive/README.md][PlOd] |\n' +
+        '| Medium | [plugins/medium/README.md][PlMe] |\n' +
+        '| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |'
   }
 }
 
@@ -155,6 +166,7 @@ function addElement(type: 'badge' | 'accordion') {
       <button @click="addList('doted')">list .</button>
       <button @click="addElement('badge')">Badge</button>
       <button @click="addElement('accordion')">Accordion</button>
+      <button @click="addElement('table')">Table</button>
     </div>
 
     <textarea v-model="inputVal" id="textarea" />
@@ -188,7 +200,7 @@ function addElement(type: 'badge' | 'accordion') {
   min-width: 500px;
   min-height: 100px;
   color: white;
-  background: #787878;
+  background: #c3c3c3;
   border: 1px solid #454545;
   border-radius: 10px;
 }
@@ -225,5 +237,23 @@ textarea {
 
 .accordion-body {
   background: #2b2b2b;
+}
+
+table {
+  width: 100%;
+}
+
+tbody tr:nth-child(even) {
+  background: #555555;
+}
+
+tbody tr:nth-child(odd) {
+  background: #8f8282;
+}
+
+thead {
+  tr {
+    background: #555555;
+  }
 }
 </style>
