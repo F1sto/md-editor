@@ -2,17 +2,17 @@
 import {onMounted, ref, watch} from 'vue';
 import marked from './components/markdown.ts';
 
-const inputVal = ref('{% cut Bear {%badge-green cool badge%} %}\n' +
+const inputVal = ref('{% cut Bear {%badge-green cool %} %}\n' +
     'body\n' +
     '{% endcut %}\n' +
     '\n' +
-    '{%badge-green green badge%}\n' +
+    '{%badge-green green %}\n' +
     '\n' +
-    '{%badge-red I\'m red badge%}\n' +
+    '{%badge-red I\'m red %}\n' +
     '\n' +
-    '{%badge-orange Orange badge%}\n' +
+    '{%badge-orange Orange %}\n' +
     '\n' +
-    '{% cut Vodka {%badge-red bad badge%} %}\n' +
+    '{% cut Vodka {%badge-red bad %} %}\n' +
     'body\n' +
     '{% endcut %}');
 
